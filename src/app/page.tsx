@@ -8,5 +8,12 @@ export default async function HomePage() {
     redirect('/signin');
   }
 
-  return <div>Hello {session.user.username}</div>;
+  return (
+    <div>
+      <div>Hello {session.user.username}</div>
+      <form action='api/auth/signout' method='post'>
+        <button>Signout</button>
+      </form>
+    </div>
+  );
 }
