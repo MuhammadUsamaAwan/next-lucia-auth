@@ -1,7 +1,7 @@
 // token.ts
 import { generateRandomString, isWithinExpiration } from 'lucia/utils';
 import { db } from '~/lib/db';
-import { emailVerificationTokens, users } from '../db/schema';
+import { emailVerificationTokens, passwordResetTokens, users } from '../db/schema';
 import { eq } from 'drizzle-orm';
 
 const EXPIRES_IN = 1000 * 60 * 60 * 2; // 2 hours
@@ -34,6 +34,42 @@ export const validateEmailVerificationToken = async (token: string) => {
     });
     if (!storedToken) throw new Error('Invalid token');
     await tx.delete(emailVerificationTokens).where(eq(emailVerificationTokens.userId, storedToken.userId));
+    return storedToken;
+  });
+  if (!isWithinExpiration(storedToken.expires)) {
+    throw new Error('Expired token');
+  }
+  return storedToken.userId;
+};
+
+export const generatePasswordResetToken = async (userId: string) => {
+  const storedUserTokens = await db.query.passwordResetTokens.findMany({
+    where: eq(users.id, userId),
+  });
+  if (storedUserTokens.length > 0) {
+    const reusableStoredToken = storedUserTokens.find(token => {
+      // check if expiration is within 1 hour
+      // and reuse the token if true
+      return isWithinExpiration(token.expires - EXPIRES_IN / 2);
+    });
+    if (reusableStoredToken) return reusableStoredToken.id;
+  }
+  const token = generateRandomString(63);
+  await db.insert(passwordResetTokens).values({
+    id: token,
+    userId,
+    expires: new Date().getTime() + EXPIRES_IN,
+  });
+  return token;
+};
+
+export const validatePasswordResetToken = async (token: string) => {
+  const storedToken = await db.transaction(async tx => {
+    const storedToken = await tx.query.passwordResetTokens.findFirst({
+      where: eq(passwordResetTokens.id, token),
+    });
+    if (!storedToken) throw new Error('Invalid token');
+    await tx.delete(passwordResetTokens).where(eq(passwordResetTokens.userId, storedToken.userId));
     return storedToken;
   });
   if (!isWithinExpiration(storedToken.expires)) {

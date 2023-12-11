@@ -29,6 +29,13 @@
       "when": 1702281334776,
       "tag": "0003_woozy_bug",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1702283972032,
+      "tag": "0004_dear_shaman",
+      "breakpoints": true
     }
   ]
 }

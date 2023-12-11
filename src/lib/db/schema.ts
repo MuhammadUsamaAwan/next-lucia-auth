@@ -60,3 +60,17 @@ export const emailVerificationTokens = pgTable('email_verification_tokens', {
     mode: 'number',
   }).notNull(),
 });
+
+export const passwordResetTokens = pgTable('password_reset_tokens', {
+  id: varchar('id', {
+    length: 128,
+  }).primaryKey(),
+  userId: varchar('user_id', {
+    length: 15,
+  })
+    .notNull()
+    .references(() => users.id),
+  expires: bigint('expires', {
+    mode: 'number',
+  }).notNull(),
+});
