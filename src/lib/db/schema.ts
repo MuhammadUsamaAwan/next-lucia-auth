@@ -1,4 +1,4 @@
-import { pgTable, bigint, varchar } from 'drizzle-orm/pg-core';
+import { pgTable, bigint, varchar, boolean } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
   id: varchar('id', {
@@ -12,6 +12,7 @@ export const users = pgTable('users', {
   })
     .notNull()
     .unique(),
+  emailVerified: boolean('email_verified').notNull().default(false),
   // other user attributes
 });
 
@@ -44,4 +45,18 @@ export const userKeys = pgTable('user_keys', {
   hashedPassword: varchar('hashed_password', {
     length: 255,
   }),
+});
+
+export const emailVerificationTokens = pgTable('email_verification_tokens', {
+  id: varchar('id', {
+    length: 128,
+  }).primaryKey(),
+  userId: varchar('user_id', {
+    length: 15,
+  })
+    .notNull()
+    .references(() => users.id),
+  expires: bigint('expires', {
+    mode: 'number',
+  }).notNull(),
 });
