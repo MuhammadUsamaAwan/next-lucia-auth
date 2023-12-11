@@ -8,6 +8,9 @@ dependencies:
   '@lucia-auth/adapter-postgresql':
     specifier: ^2.0.2
     version: 2.0.2(lucia@2.7.4)(pg@8.11.3)
+  '@lucia-auth/oauth':
+    specifier: ^3.5.0
+    version: 3.5.0(lucia@2.7.4)
   drizzle-orm:
     specifier: ^0.29.1
     version: 0.29.1(@types/pg@8.10.9)(pg@8.11.3)
@@ -873,6 +876,14 @@ packages:
     dependencies:
       lucia: 2.7.4
       pg: 8.11.3
+    dev: false
+
+  /@lucia-auth/oauth@3.5.0(lucia@2.7.4):
+    resolution: {integrity: sha512-JSwAMVwlDJtbvfcJV1nbkv41OD830pgICrx8zFT71SYd5I1MnEQ+GqMTXBGRyxzc5XlLatT8ZS1Jt0k81487xg==}
+    peerDependencies:
+      lucia: ^2.0.0
+    dependencies:
+      lucia: 2.7.4
     dev: false
 
   /@next/env@14.0.4:
