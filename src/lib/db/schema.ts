@@ -4,6 +4,14 @@ export const users = pgTable('users', {
   id: varchar('id', {
     length: 15, // change this when using custom user ids
   }).primaryKey(),
+  username: varchar('username', {
+    length: 32,
+  }).notNull(),
+  email: varchar('email', {
+    length: 255,
+  })
+    .notNull()
+    .unique(),
   // other user attributes
 });
 

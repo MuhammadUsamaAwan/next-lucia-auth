@@ -14,6 +14,13 @@ export const auth = lucia({
     session: 'user_sessions',
     key: 'users_key',
   }),
+  getUserAttributes(user) {
+    return {
+      id: user.id,
+      username: user.username,
+      email: user.email,
+    };
+  },
 });
 
 export type Auth = typeof auth;
