@@ -7,6 +7,7 @@ export default function SigninPage() {
       <input placeholder='Password' type='password' name='password' />
       <button type='submit'>Signin</button>
       <Link href='/signup'>Signup</Link>
+      <Link href='/signin/google'>Signin with google</Link>
       <Link href='/reset-password'>Forgot password</Link>
     </form>
   );
