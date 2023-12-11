@@ -23,7 +23,7 @@ export const POST = async (request: Request) => {
       });
     }
     const token = await generatePasswordResetToken(storedUser.id);
-    console.log(token);
+    console.log('/reset-password/' + token);
     return new Response();
   } catch (e) {
     return new Response('An unknown error occurred', {
