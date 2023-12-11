@@ -39,4 +39,5 @@ export const validateEmailVerificationToken = async (token: string) => {
   if (!isWithinExpiration(storedToken.expires)) {
     throw new Error('Expired token');
   }
+  return storedToken.userId;
 };

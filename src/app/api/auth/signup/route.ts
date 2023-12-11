@@ -2,6 +2,7 @@ import { auth } from '~/lib/auth/lucia';
 import { LuciaError } from 'lucia';
 import * as context from 'next/headers';
 import { NextResponse } from 'next/server';
+import { generateEmailVerificationToken } from '~/lib/auth/token';
 
 export const POST = async (request: Request) => {
   const formData = await request.formData();
@@ -23,19 +24,23 @@ export const POST = async (request: Request) => {
       attributes: {
         email,
         username,
+        email_verified: false,
       },
     });
     const session = await auth.createSession({
       userId: user.userId,
       attributes: {},
     });
-    const authRequest = auth.handleRequest(request.method, context);
-    authRequest.setSession(session);
+    const sessionCookie = auth.createSessionCookie(session);
+    const token = await generateEmailVerificationToken(user.userId);
+    // TODO: send email with token
+    console.log('api/auth/email-verification/' + token);
     return new Response(null, {
-      status: 302,
       headers: {
-        Location: '/', // redirect to profile page
+        Location: '/',
+        'Set-Cookie': sessionCookie.serialize(), // store session cookie
       },
+      status: 302,
     });
   } catch (e) {
     console.log(e);

@@ -1,6 +1,5 @@
 import { auth } from '~/lib/auth/lucia';
 import { LuciaError } from 'lucia';
-import * as context from 'next/headers';
 
 export const POST = async (request: Request) => {
   const formData = await request.formData();
@@ -17,13 +16,13 @@ export const POST = async (request: Request) => {
       userId: key.userId,
       attributes: {},
     });
-    const authRequest = auth.handleRequest(request.method, context);
-    authRequest.setSession(session);
+    const sessionCookie = auth.createSessionCookie(session);
     return new Response(null, {
-      status: 302,
       headers: {
         Location: '/', // redirect to profile page
+        'Set-Cookie': sessionCookie.serialize(), // store session cookie
       },
+      status: 302,
     });
   } catch (e) {
     if (e instanceof LuciaError && (e.message === 'AUTH_INVALID_KEY_ID' || e.message === 'AUTH_INVALID_PASSWORD')) {
