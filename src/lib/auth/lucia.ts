@@ -12,7 +12,7 @@ export const auth = lucia({
   adapter: pg(pool, {
     user: 'users',
     session: 'user_sessions',
-    key: 'users_key',
+    key: 'user_keys',
   }),
   getUserAttributes(user) {
     return {
