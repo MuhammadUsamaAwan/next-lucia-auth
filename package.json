@@ -12,7 +12,9 @@
     "db:studio": "dotenv drizzle-kit studio"
   },
   "dependencies": {
+    "@lucia-auth/adapter-postgresql": "^2.0.2",
     "drizzle-orm": "^0.29.1",
+    "lucia": "^2.7.4",
     "next": "14.0.4",
     "pg": "^8.11.3",
     "react": "^18",
