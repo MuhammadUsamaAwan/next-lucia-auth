@@ -2,6 +2,8 @@ import { lucia } from 'lucia';
 import { nextjs_future } from 'lucia/middleware';
 import { pg } from '@lucia-auth/adapter-postgresql';
 import { pool } from '~/lib/db';
+import * as context from 'next/headers';
+import { cache } from 'react';
 
 export const auth = lucia({
   env: process.env.NODE_ENV === 'production' ? 'PROD' : 'DEV',
@@ -24,3 +26,8 @@ export const auth = lucia({
 });
 
 export type Auth = typeof auth;
+
+export const getSession = cache(() => {
+  const authRequest = auth.handleRequest('GET', context);
+  return authRequest.validate();
+});
